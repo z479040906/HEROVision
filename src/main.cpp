@@ -8,7 +8,6 @@
  image processing thread and massage listener.The whole project is devided into
  three threads and runs all the time.
  *****************************************************************************/
-#include <iostream>
 #include <opencv2/opencv.hpp>
 #include <thread>
 
@@ -17,13 +16,15 @@
 
 using namespace cv;
 
-int main() {
-    char *config_file_name = "../param/param_config.xml";
+int main(int argc,char **argv) {
+    char *armor_config_filename = static_cast<char*>("../param/armor_config.xml");
+//    char *rune_config_filename = static_cast<char*>("../param/rune_config.xml");
+    char *rune_config_filename = NULL;
     Workspace workspace;
-    workspace.init(config_file_name);
+    workspace.init(armor_config_filename,rune_config_filename);
     std::thread image_receiving_thread(&Workspace::image_receiving_thread_func,workspace);
     std::thread image_processing_thread(&Workspace::image_processing_thread_func,workspace);
-    std::thread image_listener_thread(&Workspace::message_litsener_thread_func,workspace);
+    std::thread image_listener_thread(&Workspace::message_listener_thread_func,workspace);
     image_listener_thread.join();
     image_processing_thread.join();
     image_listener_thread.join();

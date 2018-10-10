@@ -3,7 +3,20 @@ project(HERORM2019)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(HERORM2019 src/main.cpp)
+add_executable(
+        HERORM2019
+        src/main.cpp
+        src/RMVideoCapture.cpp
+        header/RMVideoCapture.hpp
+        src/workspace.cpp
+        header/workspace.h
+        src/camera.cpp
+        header/camera.h
+        src/worker.cpp
+        header/worker.h
+        src/timer.cpp
+        header/timer.h
+        )
 
 include_directories(
         ${OPENCV_INCLUDE_DIRS}

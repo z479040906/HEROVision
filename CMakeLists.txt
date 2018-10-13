@@ -16,6 +16,20 @@ add_executable(
         header/worker.h
         src/timer.cpp
         header/timer.h
+        src/armorpreprocessor.cpp
+        header/armorpreprocessor.h
+        src/contoursfinder.cpp
+        header/contoursfinder.h
+        src/armorfinder.cpp
+        header/armorfinder.h
+        src/stereosolver.cpp
+        header/stereosolver.h
+        src/targetselector.cpp
+        header/targetselector.h
+        src/messagereader.cpp
+        header/messagereader.h
+        src/predictor.cpp
+        header/predictor.h
         )
 
 include_directories(

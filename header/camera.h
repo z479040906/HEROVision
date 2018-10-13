@@ -15,16 +15,26 @@
 
 using namespace cv;
 
+typedef struct{
+    Mat image;
+    int frame_numbe=0;
+}Frame;
+
 class MonoCamera:Worker{
 public:
 
 private:
-    RMVideoCapture camera;
+    RMVideoCapture *camera;
+    int exposure_time;
+    int width;
+    int height;
     int current_frame;
 public:
-    MonoCamera();
+    MonoCamera(char *device);
     ~MonoCamera();
-    Mat getImage();
+    void init(char *mono_config_filename);
+    inline Frame getImage();
+    void setExposureTime(bool is_auto,int exposure_time);
 private:
 
 };
@@ -34,22 +44,30 @@ class StereoCamera:Worker{
 public:
 
 private:
-    RMVideoCapture camera_left;
+    //left_param
+    RMVideoCapture *camera_left;
     int exposure_time_left;
     int width_left;
     int height_left;
     int current_frame_left;
 
-    RMVideoCapture camera_right;
+    //right_param
+    RMVideoCapture *camera_right;
     int exposure_time_right;
     int width_right;
     int height_right;
     int current_frame_right;
+
+    //common_param
+
+
 public:
-    StereoCamera();
+    StereoCamera(char *device_left, char *device_right);
     ~StereoCamera();
-    Mat getImageLeft();
-    Mat getImageRight();
+    void init(char *stereo_config_filename);
+    Frame getImageLeft();
+    Frame getImageRight();
+    void setExposureTime(bool is_auto,int exposure_time);
 private:
 
 };

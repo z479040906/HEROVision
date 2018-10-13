@@ -12,16 +12,21 @@
 #include <opencv2/opencv.hpp>
 
 class Timer {
+private:
+    enum{
+        STANDBY,
+        RUNNING
+    };
+    double time_start;
+    double time_end;
+    int8_t timer_status;
 public:
     Timer();
     ~Timer();
-    bool start();
+    void start();
     double restart();
     void stop();
-    double getTime();
-private:
-    double time_start;
-    double time_end;
+    inline double getTime();
 };
 
 

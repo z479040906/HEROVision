@@ -10,18 +10,16 @@
 #define HERORM2019_WORKER_H
 
 #include <iostream>
+#include <vector>
+
 #include "timer.h"
 
-class Worker {
-public:
-
-private:
+virtual class Worker {
+protected:
     Timer timer;
 public:
     Worker();
     ~Worker();
-private:
-
 };
 
 

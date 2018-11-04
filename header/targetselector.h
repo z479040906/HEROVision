@@ -25,7 +25,7 @@ public:
     TargetSelector();
     ~TargetSelector();
     void run(vector<Armor> &armor_with_position,
-             RotatedRect &target);
+             Armor &target);
 private:
 };
 

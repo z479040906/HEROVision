@@ -43,7 +43,7 @@ public:
 
     void restartCapture();
 
-    int getFrameCount() {
+    inline int getFrameCount() {
         return cur_frame;
     }
 

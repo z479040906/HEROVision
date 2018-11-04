@@ -7,6 +7,7 @@
  *****************************************************************************/
 
 #include <camera.h>
+#include <armorpreprocessor.h>
 #include "camera.h"
 
 MonoCamera::MonoCamera(char *device) {
@@ -40,7 +41,6 @@ void MonoCamera::setExposureTime(bool is_auto, int exposure_time) {
 StereoCamera::StereoCamera(char *device_left, char *device_right) {
     camera_left=new RMVideoCapture(device_left)
     camera_right=new RMVideoCapture(device_right);
-
     current_frame_left=0;
     current_frame_right=0;
 }
@@ -58,18 +58,26 @@ void StereoCamera::init(char *stereo_config_filename) {
     filestorage["width_left"]>>width_left;
     filestorage["height_left"]>>height_left;
     camera_left->setExposureTime(false,exposure_time_left);
+    filestorage["exposure_time_right"]>>exposure_time_right;
+    filestorage["width_right"]>>width_right;
+    filestorage["height_right"]>>height_right;
+    filestorage["exposure_time_right"]>>exposure_time_right;
+    filestorage["width_right"]>>width_right;
+    filestorage["height_right"]>>height_right;
     camera_right->setExposureTime(false,exposure_time_right);
 }
 
 inline Frame StereoCamera::getImageLeft() {
     Frame frame_temp;
     *camera_left>>frame_temp.image;
+    frame_temp.frame_number=camera_left->getFrameCount();
     return frame_temp;
 }
 
 inline Frame StereoCamera::getImageRight() {
     Frame frame_temp;
     *camera_right>>frame_temp.image;
+    frame_temp.frame_number=camera_right->getFrameCount();
     return frame_temp;
 }
 

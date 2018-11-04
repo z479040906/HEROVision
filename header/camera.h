@@ -59,7 +59,8 @@ private:
     int current_frame_right;
 
     //common_param
-
+    double base_length;
+    double focus_distance;
 
 public:
     StereoCamera(char *device_left, char *device_right);
@@ -68,6 +69,7 @@ public:
     Frame getImageLeft();
     Frame getImageRight();
     void setExposureTime(bool is_auto,int exposure_time);
+
 private:
 
 };

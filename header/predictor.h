@@ -22,7 +22,7 @@ private:
 public:
     Predictor();
     ~Predictor();
-    void run(RotatedRect &target/**,queue<Signal> signal_queue**/);
+    void run(Armor &target/**,queue<Signal> signal_queue**/);
 private:
 };
 

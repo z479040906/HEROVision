@@ -1,6 +1,10 @@
-//
-// Created by yuxin on 18-10-13.
-//
+/******************************************************************************
+ Copyright© 2019 HITWH HERO-Robomaster Group
+
+ Author:Zhou Yuxin on 2018.10.13
+
+ Detail:
+ *****************************************************************************/
 
 #include "meassagesender.h"
 

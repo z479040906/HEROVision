@@ -43,11 +43,18 @@ private:
     int ptz_angle;
     int work_mode;
 
+
     ///common variables
     //Rule rule;
     Timer timer;
     const int row_image_buffer_stereo_maxsize=5;
     const int row_image_buffer_mono_maxsize=5;
+    Mat camera_matrix_left;
+    Mat distortion_coeff_left;
+    Mat camera_matrix_right;
+    Mat distortion_coeff_right;
+    Mat camera_matrix_mono;
+    Mat distortion_coeff_mono;
 
     ///workers
     StereoCamera *stereo_camera;
@@ -68,15 +75,15 @@ private:
 
 
      **/
-    ///workpart
+    ///workfield
     vector<Frame> row_image_buffer_mono;
     vector<Frame> row_image_buffer_left;
     vector<Frame> row_image_buffer_right;
     vector<Frame> preprocessed_buffer_mono;
     vector<Frame> preprocessed_buffer_left;
     vector<Frame> preprocessed_buffer_right;
-    vector<vector<Point2f>> contours_left;
-    vector<vector<Point2f>> contours_right;
+    vector<RotatedRect> contours_left;
+    vector<RotatedRect> contours_right;
     vector<RotatedRect> armors_left;
     vector<RotatedRect> armors_right;
     vector<Armor> armor_with_position;
@@ -101,6 +108,9 @@ private:
     void setPtzAngle(int angle);
     void setMode(int mode);
     bool processing_loop();
+    void image_processing_step1();
+    void image_processing_step2();
+    void image_processing_step3();
 };
 
 

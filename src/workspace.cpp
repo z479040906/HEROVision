@@ -27,9 +27,18 @@ bool Workspace::config(char *stereo_config_filename,
                        char *mono_config_filename,
                        char *armor_param_filename,
                        char *rune_config_filename) {
+    FileStorage filestorage("stereo_config_filename",FileStorage::READ);
+    filestorage["camera_matrix_left"]>>camera_matrix_left;
+    filestorage["distortion_coeff_left"]>>distortion_coeff_left;
+    filestorage["camera_matrix_right"]>>camera_matrix_right;
+    filestorage["distortion_coeff_right"]>>distortion_coeff_right;
+    filestorage["camera_matrix_mono"]>>camera_matrix_mono;
+    filestorage["distortion_coeff_mono"]>>distortion_coeff_mono;
+    armor_preprocessor.init(armor_param_filename);
     stereo_camera->init(stereo_config_filename);
     mono_camera->init(mono_config_filename);
     armor_finder.init(armor_param_filename);
+    stereo_solver.init(stereo_config_filename);
 //    rune_object.init(rune_config_filename);
 }
 
@@ -51,21 +60,14 @@ bool Workspace::image_receiving_thread_func() {
             row_image_buffer_mono.push_back(mono_camera->getImage());
         }
     }
-    return true;
+//    return true;
 }
 
 bool Workspace::image_processing_thread_func() {
     //TODO: Load several threads to process the image
-
-    thread t1(&ArmorPreprocessor::run,armor_preprocessor,row_image_buffer_left,preprocessed_buffer_left);
-    thread t2(&ArmorPreprocessor::run,armor_preprocessor,row_image_buffer_right,preprocessed_buffer_right);
-    thread t3(&ContoursFinder::run,contours_finder,preprocessed_buffer_left,contours_left);
-    thread t4(&ContoursFinder::run,contours_finder,preprocessed_buffer_right,contours_right);
-    thread t5(&ArmorFinder::run,armor_finder,contours_left,armors_left);
-    thread t6(&ArmorFinder::run,armor_finder,contours_right,armors_right);
-    thread t7(&StereoSolver::run,stereo_solver,armors_left,armors_right,armor_with_position);
-    thread t8(&TargetSelector::run,target_selector,armor_with_position,target);
-    thread t9(&Predictor::run,predictor,target/*,signal_queue*/);
+    thread thread_step1(&Workspace::image_processing_step1,*this);
+    thread thread_step2(&Workspace::image_processing_step2,*this);
+    thread thread_step3(&Workspace::image_processing_step3,*this);
 //    thread(&AngleSolver::run(),angle_solver);
 //    thread(&TargetSelector::run(),target_selector);
 
@@ -86,7 +88,7 @@ bool Workspace::message_communication_thread_func(){
 }
 
 void Workspace::setPtzAngle(int angle) {
-
+    ptz_angle=angle;
 }
 
 void Workspace::setMode(int mode){
@@ -112,6 +114,30 @@ void Workspace::setMode(int mode){
         default:
             work_mode=WAITING;
     }
+}
+
+void Workspace::image_processing_step1() {
+    armor_preprocessor.run(row_image_buffer_left,
+                           preprocessed_buffer_left,
+                           camera_matrix_left,
+                           distortion_coeff_left);
+    armor_preprocessor.run(row_image_buffer_right,
+                           preprocessed_buffer_right,
+                           camera_matrix_right,
+                           distortion_coeff_right);
+    contours_finder.run(preprocessed_buffer_left,contours_left);
+    contours_finder.run(preprocessed_buffer_right,contours_right);
+}
+
+void Workspace::image_processing_step2() {
+    armor_finder.run(contours_left,armors_left,true);
+    armor_finder.run(contours_right,armors_right,true);
+}
+
+void Workspace::image_processing_step3() {
+    stereo_solver.run(armors_left,armors_right,armor_with_position);
+    target_selector.run(armor_with_position,target);
+    predictor.run(target/*,signal_queue*/);
 }
 
 bool Workspace::processing_loop() {

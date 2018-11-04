@@ -1,7 +1,7 @@
 /******************************************************************************
  Copyright© 2019 HITWH HERO-Robomaster Group
 
- Author:Zhou Yuxin on 2018.10.12
+ Author:Mark Chang on 2018.10.18
 
  Detail:
  *****************************************************************************/
@@ -12,23 +12,22 @@
 #include <opencv2/opencv.hpp>
 #include <vector>
 
-#include "camera.h"
+#include "armorpreprocessor.h"
 #include "worker.h"
+
+//#define DEBUG_SHOW
 
 using namespace std;
 using namespace cv;
 
-
 class ContoursFinder:Worker {
 public:
-
 private:
-
 public:
     ContoursFinder();
     ~ContoursFinder();
     void run(vector<Frame> &preprocessed_buffer,
-             vector<vector<Point2f>> &contours);
+             vector<RotatedRect> &contours);
 private:
 
 };

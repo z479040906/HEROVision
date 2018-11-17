@@ -6,6 +6,8 @@
  Detail:
  *****************************************************************************/
 
+ //TODO:完成主体框架的流程，加入插值部分。
+
 #include "workspace.h"
 
 Workspace::Workspace() {
@@ -127,15 +129,15 @@ void Workspace::image_processing_step1() {
                            distortion_coeff_right);
     contours_finder.run(preprocessed_buffer_left,contours_left);
     contours_finder.run(preprocessed_buffer_right,contours_right);
-}
-
-void Workspace::image_processing_step2() {
     armor_finder.run(contours_left,armors_left,true);
     armor_finder.run(contours_right,armors_right,true);
 }
 
-void Workspace::image_processing_step3() {
+void Workspace::image_processing_step2() {
     stereo_solver.run(armors_left,armors_right,armor_with_position);
+}
+
+void Workspace::image_processing_step3() {
     target_selector.run(armor_with_position,target);
     predictor.run(target/*,signal_queue*/);
 }

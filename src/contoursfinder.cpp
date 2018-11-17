@@ -5,10 +5,12 @@
 
  Detail:Find the contours in  binary image which satisfy the size condition.
         target contours will be saved in final_found_contours.
+
  *****************************************************************************/
 
-
 #include "contoursfinder.h"
+
+//TODO:取消使用数组进行数据传递，没有必要。
 
 ContoursFinder::ContoursFinder() {
 

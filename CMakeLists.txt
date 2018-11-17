@@ -26,10 +26,14 @@ add_executable(
         header/stereosolver.h
         src/targetselector.cpp
         header/targetselector.h
-        src/messagereader.cpp
-        header/messagereader.h
         src/predictor.cpp
         header/predictor.h
+        src/serial.cpp
+        header/serial.h
+        src/serial.cpp
+        header/serialport.h
+        src/kalmanfilter.cpp
+        header/kalmanfilter.h
         )
 
 include_directories(

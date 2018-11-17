@@ -5,14 +5,16 @@
 
  Detail:
  *****************************************************************************/
+#include <iostream>
 
 #include "timer.h"
 
+using namespace std;
 using namespace cv;
 
 Timer::Timer() {
-    time_start=0.0;
-    time_end=0.0;
+    time_start=0;
+    time_end=0;
     timer_status=STANDBY;
 }
 
@@ -21,7 +23,7 @@ Timer::~Timer() {
 }
 
 void Timer::start() {
-    time_start=getTickCount();
+    time_start=clock();
     timer_status=RUNNING;
 }
 
@@ -37,7 +39,9 @@ void Timer::stop() {
 }
 
 inline double Timer::getTime() {
+    double delta_time;
     assert(timer_status==RUNNING);
-    time_end=getTickCount();
-    return (time_end-time_start)*1000/getCPUTickCount();
+    time_end=clock();
+    delta_time= static_cast<double>(time_end-time_start);
+    return delta_time*1000.0/CLOCKS_PER_SEC;
 }

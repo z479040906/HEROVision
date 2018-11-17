@@ -76,17 +76,11 @@ private:
 
      **/
     ///workfield
-    vector<Frame> row_image_buffer_mono;
-    vector<Frame> row_image_buffer_left;
-    vector<Frame> row_image_buffer_right;
-    vector<Frame> preprocessed_buffer_mono;
-    vector<Frame> preprocessed_buffer_left;
-    vector<Frame> preprocessed_buffer_right;
-    vector<RotatedRect> contours_left;
-    vector<RotatedRect> contours_right;
-    vector<RotatedRect> armors_left;
-    vector<RotatedRect> armors_right;
-    vector<Armor> armor_with_position;
+    queue<Frame> row_image_buffer_mono;
+    queue<Frame> preprocessed_buffer_mono;
+    queue<vector<RotatedRect>> contours;
+    queue<vector<RotatedRect>> armors;
+    queue<vector<Armor>> armor_with_position;
     Armor target;
 //    Position target_position;
 //    queue<Position> history_position;

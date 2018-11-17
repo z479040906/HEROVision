@@ -10,6 +10,7 @@
 #define HERORM2019_TIMER_H
 
 #include <opencv2/opencv.hpp>
+//#include <time.h>
 
 class Timer {
 private:
@@ -17,8 +18,8 @@ private:
         STANDBY,
         RUNNING
     };
-    double time_start;
-    double time_end;
+    clock_t time_start;
+    clock_t time_end;
     int8_t timer_status;
 public:
     Timer();

@@ -10,6 +10,8 @@
 #include "armorpreprocessor.h"
 //#define ADJUST
 
+//TODO:增加GPU版的预处理代码
+
 using namespace cv;
 
 ArmorPreprocessor::ArmorPreprocessor() {

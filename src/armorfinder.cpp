@@ -8,6 +8,8 @@
         screened out the armor.
  *****************************************************************************/
 
+//TODO:取消使用数组进行数据传递，没有必要。继续增加筛选条件，保证正确性
+
 #include "armorfinder.h"
 
 using namespace std;

@@ -3,6 +3,8 @@
 
  Author:Zhou Yuxin on 2018.10.9
 
+ Update:Zhou Yuxin on 2018.11.18
+
  Detail:
  *****************************************************************************/
 
@@ -17,12 +19,11 @@
 #include "camera.h"
 #include "worker.h"
 #include "timer.h"
-#include "stereosolver.h"
+#include "anglesolver.h"
 #include "armorpreprocessor.h"
 #include "contoursfinder.h"
 #include "armorfinder.h"
-#include "stereosolver.h"
-#include "targetselector.h"
+#include "anglesolver.h"
 #include "predictor.h"
 
 
@@ -47,25 +48,24 @@ private:
     ///common variables
     //Rule rule;
     Timer timer;
-    const int row_image_buffer_stereo_maxsize=5;
-    const int row_image_buffer_mono_maxsize=5;
-    Mat camera_matrix_left;
-    Mat distortion_coeff_left;
-    Mat camera_matrix_right;
-    Mat distortion_coeff_right;
+    const int raw_image_buffer_stereo_maxsize=5;
+    const int raw_image_buffer_mono_maxsize=5;
+//    Mat camera_matrix_left;
+//    Mat distortion_coeff_left;
+//    Mat camera_matrix_right;
+//    Mat distortion_coeff_right;
     Mat camera_matrix_mono;
     Mat distortion_coeff_mono;
 
     ///workers
-    StereoCamera *stereo_camera;
+//    StereoCamera *stereo_camera;
     MonoCamera *mono_camera;
 
     ///armor_detector
     ArmorPreprocessor armor_preprocessor;
     ContoursFinder contours_finder;
     ArmorFinder armor_finder;
-    StereoSolver stereo_solver;
-    TargetSelector target_selector;
+    AngleSolver angle_solver;
 //    ArmorTracker armor_tracker;
     Predictor predictor;
     /**
@@ -76,11 +76,10 @@ private:
 
      **/
     ///workfield
-    queue<Frame> row_image_buffer_mono;
-    queue<Frame> preprocessed_buffer_mono;
-    queue<vector<RotatedRect>> contours;
-    queue<vector<RotatedRect>> armors;
-    queue<vector<Armor>> armor_with_position;
+    queue<Frame> raw_image_buffer_mono;
+    Frame preprocessed_image_mono;
+    vector<RotatedRect> lightbars;
+    vector<RotatedRect> armors;
     Armor target;
 //    Position target_position;
 //    queue<Position> history_position;
@@ -90,21 +89,21 @@ private:
 public:
     Workspace();
     ~Workspace();
-    bool init(char *stereo_left,char *stereo_right,char *mono_camera);
-    bool config(char *stereo_config_filename,
-                char *mono_config_filename,
+    bool init(char *mono_camera_name);
+    bool init(char *stereo_left,char *stereo_right,char *mono_camera_name);
+    bool config(char *solver_config_filename,
                 char *armor_finder_config_filename,
-                char *rune_config_filename)
+                char *rune_config_filename);
     bool image_receiving_thread_func();
     bool image_processing_thread_func();
     bool message_communication_thread_func();
 private:
     void setPtzAngle(int angle);
     void setMode(int mode);
-    bool processing_loop();
-    void image_processing_step1();
-    void image_processing_step2();
-    void image_processing_step3();
+//    bool processing_loop();
+//    void image_processing_step1();
+//    void image_processing_step2();
+//    void image_processing_step3();
 };
 
 

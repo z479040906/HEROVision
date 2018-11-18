@@ -1,7 +1,7 @@
 /******************************************************************************
  Copyright© 2019 HITWH HERO-Robomaster Group
 
- Author:Wang Xiaoyan & Song Haodi
+ Author:Wang Xiaoyan & Song Haodi on 2018.10.20
 
  Detail:Through the armor of the aspect ratio, the angle between the diagonal
         of the lightbar and the two light bars, the angle of the two lightbars

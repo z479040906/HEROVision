@@ -3,6 +3,8 @@
 
  Author:Hu Zheyu on 2018.10.19
 
+ Update:Zhou Yuxin on 2018.11.18
+
  Detail:主要方案为对输入图像转灰度,通道分离,二值化,然后根据敌军颜色通道对分离出的通道相减并膨胀运算,
  最后得到的结果与处理后的输入求交集.
  *****************************************************************************/
@@ -31,26 +33,23 @@ void ArmorPreprocessor::init(char *armor_param_filename){
     contour_thread_kernel = getStructuringElement(MORPH_ELLIPSE,Size(9,9));
 }
 
-void ArmorPreprocessor::run(vector<Frame> &row_image_buffer,
-                            vector<Frame> &preprocessed_buffer,
+void ArmorPreprocessor::run(Frame &raw_image,
+                            Frame &preprocessed_image,
                             const Mat &camera_matrix,
                             const Mat &distortion_coeff
 ) {
     timer.start();
     //TODO:START
-    if (!(row_image_buffer.empty()))
-    {
-        for (int i=0;i<row_image_buffer.size();i++)
-        {
-            Frame temp=row_image_buffer.back();
-            row_image_buffer.pop_back();
-            Mat input=temp.image.clone();
-            Mat binary;
-            processInput(input, binary,camera_matrix,distortion_coeff);
-            temp.image=binary.clone();
-            preprocessed_buffer.push_back(temp);
-        }
-    }
+//    if (!(row_image_buffer.empty()))
+//    {
+//    for (int i=0;i<raw_image.size();i++)
+//    {
+    Mat input=raw_image.image.clone();
+    Mat binary;
+    processInput(input, binary,camera_matrix,distortion_coeff);
+    raw_image.image=binary.clone();
+    preprocessed_image=raw_image;
+//    }
     //TODO:END
     cout<<"armor_preprocessor running time:"<<timer.getTime()<<endl;
     timer.stop();

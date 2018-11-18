@@ -3,6 +3,8 @@
 
  Author:Hu Zheyu on 2018.10.19
 
+ Update:Zhou Yuxin on 2018.11.18
+
  Detail:预处理部分采用的是多数开源战队的都使用的方案,主要两个函数ProcessInput和ProcessChannels
  分别是对输入图像进行处理和对分离的通道根据敌军颜色进行计算.函数run是对预处理模块的封装,以便于调用.
  *****************************************************************************/
@@ -14,15 +16,16 @@
 #include <opencv2/opencv.hpp>
 #include <vector>
 
+#include "camera.h"
 #include "worker.h"
 
 using namespace std;
 using namespace cv;
 
-typedef struct{
-    Mat image;
-    int frame_number=0;
-}Frame;
+//typedef struct{
+//    Mat image;
+//    int frame_number=0;
+//}Frame;
 
 
 class ArmorPreprocessor:Worker {
@@ -38,8 +41,8 @@ public:
     ArmorPreprocessor();
     ~ArmorPreprocessor();
     void init(char *armor_param_filename);
-    void run(vector<Frame> &row_image_buffer,
-             vector<Frame> &preprocessed_buffer,
+    void run(Frame &row_image,
+             Frame &preprocessed_image,
              const Mat &camera_matrix,
              const Mat &distortion_coeff);
 private:

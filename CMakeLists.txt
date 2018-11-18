@@ -22,8 +22,8 @@ add_executable(
         header/contoursfinder.h
         src/armorfinder.cpp
         header/armorfinder.h
-        src/stereosolver.cpp
-        header/stereosolver.h
+        src/anglesolver.cpp
+        header/anglesolver.h
         src/targetselector.cpp
         header/targetselector.h
         src/predictor.cpp

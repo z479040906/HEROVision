@@ -14,7 +14,7 @@
 
 #include "timer.h"
 
-virtual class Worker {
+class Worker {
 protected:
     Timer timer;
 public:

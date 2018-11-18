@@ -1,7 +1,7 @@
 /******************************************************************************
  Copyright© 2019 HITWH HERO-Robomaster Group
 
- Author:Wang Xiaoyan & Song Haodi
+ Author:Wang Xiaoyan & Song Haodi on 2018.10.20
 
  Detail:This class is used for the identification of the armor.
  *****************************************************************************/

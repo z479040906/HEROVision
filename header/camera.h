@@ -3,6 +3,8 @@
 
  Author:Zhou Yuxin on 2018.10.10
 
+ Update:Zhou Yuxin on 2018.11.18
+
  Detail:
  *****************************************************************************/
 
@@ -17,7 +19,7 @@ using namespace cv;
 
 typedef struct{
     Mat image;
-    int frame_numbe=0;
+    int frame_number=0;
 }Frame;
 
 class MonoCamera:Worker{
@@ -26,11 +28,12 @@ public:
 private:
     RMVideoCapture *camera;
     int exposure_time;
-    int width;
-    int height;
+    int frame_width;
+    int frame_height;
     int current_frame;
+    int frame_per_second;
 public:
-    MonoCamera(char *device);
+    MonoCamera(const char *device);
     ~MonoCamera();
     void init(char *mono_config_filename);
     inline Frame getImage();

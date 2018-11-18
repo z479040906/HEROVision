@@ -3,6 +3,8 @@
 
  Author:Mark Chang on 2018.10.18
 
+ Update:Zhou Yuxin on 2018.11.18
+
  Detail:
  *****************************************************************************/
 
@@ -20,13 +22,14 @@
 using namespace std;
 using namespace cv;
 
+
 class ContoursFinder:Worker {
 public:
 private:
 public:
     ContoursFinder();
     ~ContoursFinder();
-    void run(vector<Frame> &preprocessed_buffer,
+    void run(Frame &preprocessed_buffer,
              vector<RotatedRect> &contours);
 private:
 

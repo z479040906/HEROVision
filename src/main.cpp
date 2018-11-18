@@ -22,8 +22,7 @@ int main(int argc,char **argv) {
 //    char *rune_config_filename = NULL;
     Workspace workspace;
     workspace.init("/dev/video0","/dev/video1","/dev/video2");
-    workspace.config("../param/stereo_config.xml",
-                     "../param/mono_config.xml",
+    workspace.config("../param/solver_param.xml",
                      "../param/armor_param.xml",
                      "../param/rune_param.xml");
     std::thread image_receiving_thread(

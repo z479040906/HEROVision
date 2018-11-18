@@ -3,14 +3,14 @@
 
  Author:Mark Chang on 2018.10.18
 
+ Update:Zhou Yuxin on 2018.11.18
+
  Detail:Find the contours in  binary image which satisfy the size condition.
         target contours will be saved in final_found_contours.
-
  *****************************************************************************/
 
-#include "contoursfinder.h"
 
-//TODO:取消使用数组进行数据传递，没有必要。
+#include "contoursfinder.h"
 
 ContoursFinder::ContoursFinder() {
 
@@ -20,17 +20,11 @@ ContoursFinder::~ContoursFinder() {
 
 }
 
-void ContoursFinder::run(vector<Frame> &preprocessed_buffer,
+void ContoursFinder::run(Frame &preprocessed_buffer,
                          vector<RotatedRect> &contours) {
     timer.start();
     //TODO:START
-
-    ///??
-    Mat src_image;
-    src_image=preprocessed_buffer.back().image;
-    preprocessed_buffer.pop_back();
-    ///??
-
+    Mat src_image=preprocessed_buffer.image;
     vector<Vec4i> hierarchy;
     vector<vector<Point2i>> temp_contours;
     findContours(src_image, temp_contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);

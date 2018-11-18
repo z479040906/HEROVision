@@ -6,8 +6,8 @@
  Detail:
  *****************************************************************************/
 
-#ifndef HERORM2019_STEREOSOLVER_H
-#define HERORM2019_STEREOSOLVER_H
+#ifndef HERORM2019_ANGLESOLVER_H
+#define HERORM2019_ANGLESOLVER_H
 
 #include <opencv2/opencv.hpp>
 #include <vector>
@@ -27,11 +27,13 @@ typedef struct {
     RotatedRect rect_right;
 }Armor;
 
-class StereoSolver:Worker {
+class AngleSolver:Worker{
 public:
 
 private:
+//    Timer timer;
     bool isStereo;
+    int solve_algorithm;
     double base_length;
     double focus_distance;
     double ptz_pitch;
@@ -40,28 +42,34 @@ private:
     Mat camera_matrix;
     Mat distortion_coeff;
 
-    ///Armor Parameters
-    double armor_width;
-    double armor_height;
+    //Armor Parameters
+    double small_armor_width;
+    double small_armor_height;
+    double big_armor_width;
+    double big_armor_height;
 
 public:
-    StereoSolver();
-    ~StereoSolver();
-    void init(char *stereo_config_filename);
+    AngleSolver();
+    ~AngleSolver();
+    void init(const char *stereo_config_filename);
+    void run(vector<RotatedRect> &armors,
+             Armor &target);
     void run(vector<RotatedRect> &armors_left,
              vector<RotatedRect> &armors_right,
              vector<Armor> &armor_with_position);
     void setPtzPitch(double input_ptz_pitch);
 private:
-    inline void solve(Point2f left_center,
-                      Point2f right_center,
-                      Armor &armor);
+    void selectTarget(vector<Armor> &armor_with_position,Armor target);
+    inline void solveMono(RotatedRect &rect,Armor &armor);
+    inline void solveStereo(Point2f left_center,
+                            Point2f right_center,
+                            Armor &armor);
     inline bool isOne(RotatedRect left,RotatedRect right);
-    void getArmorCorners(const cv::RotatedRect &rect, vector<Point2f> &target2d);
-    void solvePnP4Points(const std::vector<cv::Point2f> &points2d,
-                         cv::Mat &rotate_matrix,
-                         cv::Mat &trans);
+    void getArmorCorners(const RotatedRect &rect, vector<Point2f> &target2d);
+    void solvePnP4Points(const vector<Point2f> &points2d,
+                         Mat &rotate_matrix,
+                         Mat &trans);
 };
 
 
-#endif //HERORM2019_STEREOSOLVER_H
+#endif //HERORM2019_ANGLESOLVER_H

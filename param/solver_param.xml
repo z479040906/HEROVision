@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<opencv_storage>
+  <camera_matrix type_id="opencv-matrix">
+    <rows>3</rows>
+    <cols>3</cols>
+    <dt>d</dt>
+    <data>
+      5.14317217e+002 0. 3.17199677e+002 0. 5.14408536e+002 2.19051428e+002 0. 0. 1.</data></camera_matrix>
+  <distortion_coeff type_id="opencv-matrix">
+    <rows>5</rows>
+    <cols>1</cols>
+    <dt>d</dt>
+    <data>
+      -4.598e-002 3.7779e-002 0.004936 -0.002691 0.</data></distortion_coeff>
+
+  <ptz2camera_trans type_id="opencv-matrix">
+    <rows>4</rows>
+    <cols>4</cols>
+    <dt>d</dt>
+    <data>
+      1. 0. 0. 0.
+      0. 1. 0. -43.3
+      0. 0. 1. 130.
+      0. 0. 0. 1.
+    </data></ptz2camera_trans>
+
+  <base_length>150.</base_length>
+  <focus_distance>2.5000000000000000e+00</focus_distance>
+  <pixel_scale>0.3</pixel_scale>
+
+  %these are armor parameters
+  <small_armor_height>50.</small_armor_height>
+  <small_armor_width>150.</small_armor_width>
+  <big_armor_height>200.</big_armor_height>
+  <big_armor_width>200.</big_armor_width>
+  <is_big_armor_thres>0.3</is_big_armor_thres>
+
+  %these are camera parameters
+  <exposure_time>20</exposure_time>
+  <frame_height>640</frame_height>
+  <frame_width>480</frame_width>
+  <frame_per_second>120</frame_per_second>
+</opencv_storage>

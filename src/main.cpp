@@ -17,13 +17,13 @@
 using namespace cv;
 
 int main(int argc,char **argv) {
-//    char *armor_config_filename = static_cast<char*>("../param/armor_config.xml");
-//    char *rune_config_filename = static_cast<char*>("../param/rune_config.xml");
-//    char *rune_config_filename = NULL;
     Workspace workspace;
-    workspace.init("/dev/video0","/dev/video1","/dev/video2");
-    workspace.config("../param/solver_param.xml",
+    workspace.init("/dev/video0");
+//    workspace.init("/dev/video0","/dev/video1","/dev/video2");
+    workspace.config("/dev/ttyTHS2",
+                     "../param/solver_param.xml",
                      "../param/armor_param.xml",
+                     "../param/other_param.xml",
                      "../param/rune_param.xml");
     std::thread image_receiving_thread(
             &Workspace::image_receiving_thread_func,

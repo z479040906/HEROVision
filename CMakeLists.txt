@@ -24,13 +24,11 @@ add_executable(
         header/armorfinder.h
         src/anglesolver.cpp
         header/anglesolver.h
-        src/targetselector.cpp
-        header/targetselector.h
         src/predictor.cpp
         header/predictor.h
         src/serial.cpp
         header/serial.h
-        src/serial.cpp
+        src/serialport.cpp
         header/serialport.h
         src/kalmanfilter.cpp
         header/kalmanfilter.h

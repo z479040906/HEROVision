@@ -36,7 +36,7 @@ public:
     MonoCamera(const char *device);
     ~MonoCamera();
     void init(char *mono_config_filename);
-    inline Frame getImage();
+    Frame getImage();
     void setExposureTime(bool is_auto,int exposure_time);
 private:
 

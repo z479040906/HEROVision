@@ -93,8 +93,13 @@ inline void AngleSolver::solveMono(RotatedRect &rect, Armor &armor) {
     Mat temp_camera_position;
     Mat camera_position=Mat::ones(4,1,CV_64FC1);
     Mat ptz_position=Mat::ones(4,1,CV_64FC1);
+    bool is_big_armor=false;
+    is_big_armor=
+            fabs((rect.size.width/rect.size.height)
+                 -(big_armor_width/big_armor_height))
+            <is_big_armor_thres;
     getArmorCorners(rect,target_corners);
-    solvePnP4Points(target_corners,rotate_matrix,temp_camera_position);
+    solvePnP4Points(target_corners,rotate_matrix,temp_camera_position,is_big_armor);
     camera_position.at<double>(0,0)=temp_camera_position.at<double>(0,0);
     camera_position.at<double>(1,0)=temp_camera_position.at<double>(1,0);
     camera_position.at<double>(2,0)=temp_camera_position.at<double>(2,0);
@@ -155,18 +160,23 @@ void AngleSolver::getArmorCorners(const cv::RotatedRect &rect, vector<Point2f> &
     target2d.push_back(left_down);
 }
 
-void AngleSolver::solvePnP4Points(const vector<cv::Point2f> &points2d, Mat &rotate_matrix, Mat &trans) {
+void AngleSolver::solvePnP4Points(const vector<cv::Point2f> &points2d, Mat &rotate_matrix, Mat &trans,bool is_big_armor) {
 
-    //TODO:增加大小装甲的选择
-    if (armor_width < 10e-5 || armor_height < 10e-5) {
-        rotate_matrix = Mat::eye(3, 3, CV_64FC1);
-        trans = Mat::zeros(3, 1, CV_64FC1);
-        return;
-    }
+//    if (armor_width < 10e-5 || armor_height < 10e-5) {
+//        rotate_matrix = Mat::eye(3, 3, CV_64FC1);
+//        trans = Mat::zeros(3, 1, CV_64FC1);
+//        return;
+//    }
     vector<Point3f> point3d;
-    double half_x = armor_width / 2.0;
-    double half_y = armor_height / 2.0;
-
+    double half_x, half_y;
+    //TODO:增加大小装甲的选择
+    if(!is_big_armor) {
+        half_x = small_armor_width / 2.0;
+        half_y = small_armor_height / 2.0;
+    }else{
+        half_x = big_armor_width / 2.0;
+        half_y = big_armor_height / 2.0;
+    }
     point3d.push_back(Point3f(-half_x, -half_y, 0));
     point3d.push_back(Point3f(half_x, -half_y, 0));
     point3d.push_back(Point3f(half_x, half_y, 0));

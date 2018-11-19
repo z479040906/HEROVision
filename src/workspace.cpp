@@ -27,26 +27,25 @@ bool Workspace::init(char *mono_camera_name) {
 
 bool Workspace::init(char *stereo_camera_left,char *stereo_camera_right,char *mono_camera_name) {
     //TODO
-//    stereo_camera = new StereoCamera(stereo_camera_left,stereo_camera_right);
+    stereo_camera = new StereoCamera(stereo_camera_left,stereo_camera_right);
     mono_camera = new MonoCamera(mono_camera_name);
     return true;
 }
 
-bool Workspace::config(char *solver_config_filename,
+bool Workspace::config(char *serialport_name,
+                       char *solver_config_filename,
                        char *armor_param_filename,
+                       char *other_param_filename,
                        char *rune_config_filename) {
     FileStorage filestorage(solver_config_filename,FileStorage::READ);
-//    filestorage["camera_matrix_left"]>>camera_matrix_left;
-//    filestorage["distortion_coeff_left"]>>distortion_coeff_left;
-//    filestorage["camera_matrix_right"]>>camera_matrix_right;
-//    filestorage["distortion_coeff_right"]>>distortion_coeff_right;
     filestorage["camera_matrix"]>>camera_matrix_mono;
     filestorage["distortion_coeff"]>>distortion_coeff_mono;
+    serialport.init_usart(serialport_name);
     armor_preprocessor.init(armor_param_filename);
-//    stereo_camera->init(stereo_config_filename);
     mono_camera->init(solver_config_filename);
     armor_finder.init(armor_param_filename);
     angle_solver.init(solver_config_filename);
+    predictor.init(other_param_filename);
 //    rune_object.init(rune_config_filename);
 }
 
@@ -54,16 +53,6 @@ bool Workspace::image_receiving_thread_func() {
     //TODO
 
     while(true){
-//        if(row_image_buffer_right.size()!=row_image_buffer_left.size()){
-//            row_image_buffer_left.clear();
-//            row_image_buffer_right.clear();
-//        }
-//        if(row_image_buffer_left.size()<row_image_buffer_stereo_maxsize) {
-//            row_image_buffer_left.push_back(stereo_camera->getImageLeft());
-//        }
-//        if(row_image_buffer_right.size()<row_image_buffer_stereo_maxsize){
-//            row_image_buffer_right.push_back(stereo_camera->getImageRight());
-//        }
         if(raw_image_buffer_mono.size()<raw_image_buffer_mono_maxsize) {
             raw_image_buffer_mono.push(mono_camera->getImage());
         }
@@ -75,17 +64,22 @@ bool Workspace::image_processing_thread_func() {
     Frame current_frame;
     while(true){
         if(!raw_image_buffer_mono.empty()){
-            current_frame=raw_image_buffer_mono.front();
-            raw_image_buffer_mono.pop();
-            armor_preprocessor.run(current_frame,
-                                   preprocessed_image_mono,
-                                   camera_matrix_mono,
-                                   distortion_coeff_mono);
-            contours_finder.run(preprocessed_image_mono,lightbars);
-            armor_finder.run(lightbars,armors,false);
-            angle_solver.run(armors,target);
-            predictor.run(target);
-            //TODO:给预测器增加发送队列的参数
+            if(work_mode==MODE::ARMOR_BLUE||work_mode==MODE::ARMOR_RED) {
+                current_frame = raw_image_buffer_mono.front();
+                raw_image_buffer_mono.pop();
+                armor_preprocessor.run(current_frame,
+                                       preprocessed_image_mono,
+                                       camera_matrix_mono,
+                                       distortion_coeff_mono);
+                contours_finder.run(preprocessed_image_mono, lightbars);
+                armor_finder.run(lightbars, armors, false);
+                angle_solver.run(armors, target);
+                predictor.run(target,signal_queue,false);
+            }else if(work_mode==MODE::RUNE_SMALL){
+                //TODO:加入小神符代码
+            }else if(work_mode==MODE::RUNE_LARGE){
+                //TODO:加入大神符代码
+            }
         }else{
             continue;
         }
@@ -105,9 +99,15 @@ bool Workspace::image_processing_thread_func() {
 bool Workspace::message_communication_thread_func(){
     //TODO：增加数据的处理和发送
     while(true){
-
+        serialport.praseDataFromCar();
+        setPtzAngle(serialport.getAnglePitch());
+        setMode(serialport.getMode());
+        if(!signal_queue.empty()) {
+            serialport.sendXYZ(signal_queue.front());
+            signal_queue.pop();
+        }
     }
-    return true;
+    return false;
 }
 
 void Workspace::setPtzAngle(int angle) {
@@ -119,19 +119,13 @@ void Workspace::setMode(int mode){
         return;
     }
     switch(mode){
-        case MODE::WAITING:
-            work_mode=MODE::WAITING;
-            break;
-        case MODE::ARMOR_RED:
-            work_mode=MODE::ARMOR_RED;
-            break;
-        case MODE::ARMOR_BLUE:
+        case SerialPort::ARMOR_MODE:
             work_mode=MODE::ARMOR_BLUE;
             break;
-        case MODE::RUNE_SMALL:
+        case SerialPort::SMALL_RUNE_MODE:
             work_mode=MODE::RUNE_SMALL;
             break;
-        case MODE::RUNE_LARGE:
+        case SerialPort::BIG_RUNE_MODE:
             work_mode=MODE::RUNE_LARGE;
             break;
         default:

@@ -33,7 +33,7 @@ void MonoCamera::init(char *mono_config_filename) {
     camera->changeVideoFormat(frame_width,frame_height);
 }
 
-inline Frame MonoCamera::getImage() {
+Frame MonoCamera::getImage() {
     Frame frame_temp;
     *camera>>frame_temp.image;
     frame_temp.frame_number=current_frame++;

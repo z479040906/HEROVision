@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<opencv_storage>
+
+    %Predictor parameters
+    <small_bullet_mass>0.0029</small_bullet_mass>
+    <big_bullet_mass>0.042</big_bullet_mass>
+    <k_>0.5</k_>
+    <gravity>9.8</gravity>
+    <air_viscosity>0.0018315</air_viscosity>
+
+</opencv_storage>

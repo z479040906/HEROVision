@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<opencv_storage>
+  <big_armor_ratio>4.0</big_armor_ratio>
+  <small_armor_ratio>2.35</small_armor_ratio>
+  <ratio_cardinality>1.0</ratio_cardinality>
+  <vertical_cardinality>0.8</vertical_cardinality>
+  <angle_cardinality>0.5</angle_cardinality>
+
+</opencv_storage>

@@ -25,6 +25,7 @@
 #include "armorfinder.h"
 #include "anglesolver.h"
 #include "predictor.h"
+#include "serialport.h"
 
 
 using namespace std;
@@ -58,8 +59,9 @@ private:
     Mat distortion_coeff_mono;
 
     ///workers
-//    StereoCamera *stereo_camera;
+    StereoCamera *stereo_camera;
     MonoCamera *mono_camera;
+    SerialPort serialport;
 
     ///armor_detector
     ArmorPreprocessor armor_preprocessor;
@@ -81,9 +83,7 @@ private:
     vector<RotatedRect> lightbars;
     vector<RotatedRect> armors;
     Armor target;
-//    Position target_position;
-//    queue<Position> history_position;
-//    queue<Signal> signal_queue;
+    queue<double*> signal_queue;
 
 
 public:
@@ -91,8 +91,10 @@ public:
     ~Workspace();
     bool init(char *mono_camera_name);
     bool init(char *stereo_left,char *stereo_right,char *mono_camera_name);
-    bool config(char *solver_config_filename,
+    bool config(char *serialport_name,
+                char *solver_config_filename,
                 char *armor_finder_config_filename,
+                char *other_param_filename,
                 char *rune_config_filename);
     bool image_receiving_thread_func();
     bool image_processing_thread_func();

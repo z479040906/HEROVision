@@ -21,10 +21,6 @@ typedef struct {
     double x=0;
     double y=0;
     double z=0;
-    double yaw=0;
-    double pitch=0;
-    RotatedRect rect_left;
-    RotatedRect rect_right;
 }Armor;
 
 class AngleSolver:Worker{
@@ -47,6 +43,7 @@ private:
     double small_armor_height;
     double big_armor_width;
     double big_armor_height;
+    double is_big_armor_thres;
 
 public:
     AngleSolver();
@@ -68,7 +65,8 @@ private:
     void getArmorCorners(const RotatedRect &rect, vector<Point2f> &target2d);
     void solvePnP4Points(const vector<Point2f> &points2d,
                          Mat &rotate_matrix,
-                         Mat &trans);
+                         Mat &trans,
+                         bool is_big_armor);
 };
 
 

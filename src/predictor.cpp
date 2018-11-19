@@ -46,8 +46,8 @@ void Predictor::run(const Armor &target,queue<double*> signal_queue,bool isBigBu
     } else {
         bullet_mass=small_bullet_mass;
     }
-	x_ = target.z;	//in Armor,z is distance,y's positive direction is down
-    y_ = -target.y;
+	x_ = target.z*0.001;	//in Armor,z is distance,y's positive direction is down
+    y_ = -target.y*0.001;	//multiply 0.001 for transforming millimeter into meter
 	theta = atan(y_ / x_);
 	theta_max = ((theta + 0.40) < (PI / 2)) ? (theta + 0.40) : (PI / 2);
 	//theta_min = ((theta - 0.40) > 0) ? (theta + 0.40) : 0;
@@ -187,6 +187,7 @@ double Predictor::find_noair_alpha(double v, double x, double y) {
 }
 
 double* Predictor::interpolation(double *current_data) {
+	//TODO:该插值法仅作测试，不知道效果如何
 	double *temp_data;
 	double d2[2];
 	double delta_d;

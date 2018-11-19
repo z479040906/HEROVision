@@ -6,27 +6,21 @@
  Detail:
  *****************************************************************************/
 
- //TODO:完成主体框架的流程，加入插值部分。
-
 #include "workspace.h"
 
 Workspace::Workspace() {
-    //TODO
 }
 
 Workspace::~Workspace() {
-    //TODO
 }
 
 bool Workspace::init(char *mono_camera_name) {
-    //TODO
 //    stereo_camera = new StereoCamera(stereo_camera_left,stereo_camera_right);
     mono_camera = new MonoCamera(mono_camera_name);
     return true;
 }
 
 bool Workspace::init(char *stereo_camera_left,char *stereo_camera_right,char *mono_camera_name) {
-    //TODO
     stereo_camera = new StereoCamera(stereo_camera_left,stereo_camera_right);
     mono_camera = new MonoCamera(mono_camera_name);
     return true;
@@ -50,14 +44,12 @@ bool Workspace::config(char *serialport_name,
 }
 
 bool Workspace::image_receiving_thread_func() {
-    //TODO
-
     while(true){
         if(raw_image_buffer_mono.size()<raw_image_buffer_mono_maxsize) {
             raw_image_buffer_mono.push(mono_camera->getImage());
         }
     }
-//    return true;
+    return true;
 }
 
 bool Workspace::image_processing_thread_func() {
@@ -97,7 +89,7 @@ bool Workspace::image_processing_thread_func() {
 }
 
 bool Workspace::message_communication_thread_func(){
-    //TODO：增加数据的处理和发送
+    //TODO:加入看门狗通信
     while(true){
         serialport.praseDataFromCar();
         setPtzAngle(serialport.getAnglePitch());
@@ -132,33 +124,3 @@ void Workspace::setMode(int mode){
             work_mode=WAITING;
     }
 }
-
-//void Workspace::image_processing_step1() {
-//    armor_preprocessor.run(row_image_buffer_left,
-//                           preprocessed_buffer_left,
-//                           camera_matrix_left,
-//                           distortion_coeff_left);
-//    armor_preprocessor.run(row_image_buffer_right,
-//                           preprocessed_buffer_right,
-//                           camera_matrix_right,
-//                           distortion_coeff_right);
-//    contours_finder.run(preprocessed_buffer_left,contours_left);
-//    contours_finder.run(preprocessed_buffer_right,contours_right);
-//    armor_finder.run(contours_left,armors_left,true);
-//    armor_finder.run(contours_right,armors_right,true);
-//}
-//
-//void Workspace::image_processing_step2() {
-//    stereo_solver.run(armors_left,armors_right,armor_with_position);
-//}
-//
-//void Workspace::image_processing_step3() {
-//    target_selector.run(armor_with_position,target);
-//    predictor.run(target/*,signal_queue*/);
-//}
-//
-//bool Workspace::processing_loop() {
-//    //TODO:we need to fill the function to let the assembly line work
-//    //there will be several threads to be every part of the assembly line
-//    return true;
-//}

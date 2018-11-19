@@ -12,8 +12,6 @@
 #include "armorpreprocessor.h"
 //#define ADJUST
 
-//TODO:增加GPU版的预处理代码
-
 using namespace cv;
 
 ArmorPreprocessor::ArmorPreprocessor() {
@@ -38,8 +36,7 @@ void ArmorPreprocessor::run(Frame &raw_image,
                             const Mat &camera_matrix,
                             const Mat &distortion_coeff
 ) {
-    timer.start();
-    //TODO:START
+//    timer.start();
 //    if (!(row_image_buffer.empty()))
 //    {
 //    for (int i=0;i<raw_image.size();i++)
@@ -50,9 +47,8 @@ void ArmorPreprocessor::run(Frame &raw_image,
     raw_image.image=binary.clone();
     preprocessed_image=raw_image;
 //    }
-    //TODO:END
-    cout<<"armor_preprocessor running time:"<<timer.getTime()<<endl;
-    timer.stop();
+//    cout<<"armor_preprocessor running time:"<<timer.getTime()<<endl;
+//    timer.stop();
 }
 
 void ArmorPreprocessor::processInput(Mat &input,

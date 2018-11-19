@@ -24,6 +24,7 @@
       0. 0. 0. 1.
     </data></ptz2camera_trans>
 
+  %stereo solver parameters
   <base_length>150.</base_length>
   <focus_distance>2.5000000000000000e+00</focus_distance>
   <pixel_scale>0.3</pixel_scale>

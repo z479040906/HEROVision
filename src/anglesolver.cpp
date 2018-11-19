@@ -8,9 +8,7 @@
  Detail:
  *****************************************************************************/
 
- //TODO:为PNP解算部分增加大小装甲区分
- //TODO:加入最终目标的筛选
-
+#include <anglesolver.h>
 #include "anglesolver.h"
 
 AngleSolver::AngleSolver() {
@@ -40,14 +38,15 @@ void AngleSolver::init(const char *stereo_config_filename) {
     filestorage["ptz2camera_trans"]>>ptz2camera_trans;
     filestorage["small_armor_height"]>>small_armor_height;
     filestorage["small_armor_width"]>>small_armor_width;
+    //TODO:大装甲参数还没有进行测量
     filestorage["big_armor_height"]>>big_armor_height;
     filestorage["big_armor_width"]>>big_armor_width;
+    filestorage["is_big_armor_thres"]>>is_big_armor_thres;
 }
 
 void AngleSolver::run(vector<RotatedRect> &armors,
                       Armor &target){
-    timer.start();
-    //TODO:START
+//    timer.start();
     RotatedRect temp_rect;
     Armor temp_armor;
     vector<Armor> armor_with_position;
@@ -58,16 +57,14 @@ void AngleSolver::run(vector<RotatedRect> &armors,
         armor_with_position.push_back(temp_armor);
     }
     selectTarget(armor_with_position,target);
-    //TODO:END
-    std::cout<<"solver running time:"<<timer.getTime()<<"ms"<<std::endl;
-    timer.stop();
+//    std::cout<<"solver running time:"<<timer.getTime()<<"ms"<<std::endl;
+//    timer.stop();
 }
 
 void AngleSolver::run(vector<RotatedRect> &armors_left,
                        vector<RotatedRect> &armors_right,
                        vector<Armor> &armor_with_position) {
-    timer.start();
-    //TODO:START
+//    timer.start();
     Armor temp_armor;
     vector<RotatedRect>::const_iterator it_left,it_right;
     if (!isOne(*it_left, *it_right)) return;
@@ -78,9 +75,8 @@ void AngleSolver::run(vector<RotatedRect> &armors_left,
     right.y=((*it_right).center.y-240)*pixel_scale;
     solveStereo(left, right, temp_armor);
     armor_with_position.push_back(temp_armor);
-    //TODO:END
-    std::cout<<"stereo_solver running time:"<<timer.getTime()<<std::endl;
-    timer.stop();
+//    std::cout<<"stereo_solver running time:"<<timer.getTime()<<std::endl;
+//    timer.stop();
 }
 
 void AngleSolver::setPtzPitch(double input_ptz_pitch) {
@@ -169,7 +165,6 @@ void AngleSolver::solvePnP4Points(const vector<cv::Point2f> &points2d, Mat &rota
 //    }
     vector<Point3f> point3d;
     double half_x, half_y;
-    //TODO:增加大小装甲的选择
     if(!is_big_armor) {
         half_x = small_armor_width / 2.0;
         half_y = small_armor_height / 2.0;
@@ -189,9 +184,16 @@ void AngleSolver::solvePnP4Points(const vector<cv::Point2f> &points2d, Mat &rota
     Rodrigues(rotate_vector, rotate_matrix);
 }
 
-void AngleSolver::selectTarget(vector<Armor> &armor_with_position, Armor target) {
-
-    while(!armor_with_position.empty()){
-        //TODO:
+void AngleSolver::selectTarget(vector<Armor> &armor_with_position, Armor &target) {
+    vector<Armor>::iterator it;
+    Armor temp_armor;
+    temp_armor.x=0.0;
+    temp_armor.y=0.0;
+    temp_armor.z=0.0;
+    if(!armor_with_position.empty()){
+        for(it=armor_with_position.begin();it!=armor_with_position.end();++it){
+            if((*it).z>100.0&&(*it).z<temp_armor.z) temp_armor=*it;
+        }
     }
+    target=temp_armor;
 }

@@ -22,11 +22,11 @@ ContoursFinder::~ContoursFinder() {
 
 void ContoursFinder::run(Frame &preprocessed_buffer,
                          vector<RotatedRect> &contours) {
-    timer.start();
-    //TODO:START
+//    timer.start();
     Mat src_image=preprocessed_buffer.image;
     vector<Vec4i> hierarchy;
     vector<vector<Point2i>> temp_contours;
+    contours.clear();
     findContours(src_image, temp_contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
     vector<vector<Point2i>>::const_iterator it;
     for(it=temp_contours.begin();it!=temp_contours.end();++it){
@@ -50,7 +50,6 @@ void ContoursFinder::run(Frame &preprocessed_buffer,
     cv::imshow("contours", src_image);
 //	waitKey(0);
 #endif
-    //TODO:END
-    cout<<"contours_finder running time:"<<timer.getTime()<<endl;
-    timer.stop();
+//    cout<<"contours_finder running time:"<<timer.getTime()<<endl;
+//    timer.stop();
 }

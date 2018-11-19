@@ -56,7 +56,7 @@ public:
              vector<Armor> &armor_with_position);
     void setPtzPitch(double input_ptz_pitch);
 private:
-    void selectTarget(vector<Armor> &armor_with_position,Armor target);
+    void selectTarget(vector<Armor> &armor_with_position,Armor &target);
     inline void solveMono(RotatedRect &rect,Armor &armor);
     inline void solveStereo(Point2f left_center,
                             Point2f right_center,

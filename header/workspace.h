@@ -77,6 +77,7 @@ private:
 
 
      **/
+
     ///workfield
     queue<Frame> raw_image_buffer_mono;
     Frame preprocessed_image_mono;
@@ -102,10 +103,6 @@ public:
 private:
     void setPtzAngle(int angle);
     void setMode(int mode);
-//    bool processing_loop();
-//    void image_processing_step1();
-//    void image_processing_step2();
-//    void image_processing_step3();
 };
 
 

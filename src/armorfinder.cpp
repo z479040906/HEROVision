@@ -8,8 +8,6 @@
         screened out the armor.
  *****************************************************************************/
 
-//TODO:取消使用数组进行数据传递，没有必要。继续增加筛选条件，保证正确性
-
 #include "armorfinder.h"
 
 using namespace std;
@@ -41,8 +39,8 @@ void ArmorFinder::run(vector<RotatedRect> &contours,
     Timer timer;
     timer.start();
 
+    armors.clear();
     if(contours.empty()||contours.size()==1) return;
-    //TODO:需要在这加入一个判断数组是否为空的语句块
 
     for(int i=0; i<contours.size(); i++) {
         contours[i] = adjustRotatedRect(contours[i]);//guarantee width is greater than height

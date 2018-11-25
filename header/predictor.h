@@ -27,9 +27,11 @@ public:
     void run(const Armor &targer,
 			   queue<double*> signal_queue,
 			   bool isBigBullet);
+    void setPitchAngle(const double input_pitch_angle);
 private:
 	const double PI=3.14159265897932;
 	double theta, alpha, alpha_min, theta_max, theta_min;//from theta to theta_max, find the ideal alpha-->alpha_min
+    double pitch_angle;
 	double bullet_speed;
 	double history_yaw[3],history_pitch[3];
 	double x_;

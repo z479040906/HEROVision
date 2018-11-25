@@ -3,7 +3,7 @@
 
  Author:Zhou Yuxin on 2018.10.12
 
- Detail:
+ Detail:Call run to use the class.
  *****************************************************************************/
 
 #ifndef HERORM2019_ANGLESOLVER_H

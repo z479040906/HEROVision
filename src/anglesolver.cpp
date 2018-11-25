@@ -8,7 +8,6 @@
  Detail:
  *****************************************************************************/
 
-#include <anglesolver.h>
 #include "anglesolver.h"
 
 AngleSolver::AngleSolver() {

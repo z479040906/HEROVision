@@ -48,7 +48,7 @@ void Predictor::run(const Armor &target,queue<double*> signal_queue,bool isBigBu
     }
 	x_ = target.z*0.001;	//in Armor,z is distance,y's positive direction is down
     y_ = -target.y*0.001;	//multiply 0.001 for transforming millimeter into meter
-	theta = atan(y_ / x_);
+	theta = atan(y_ / x_)+pitch_angle;
 	theta_max = ((theta + 0.40) < (PI / 2)) ? (theta + 0.40) : (PI / 2);
 	//theta_min = ((theta - 0.40) > 0) ? (theta + 0.40) : 0;
 	for (alpha = theta; alpha < theta_max; alpha += 0.01)//弧度制
@@ -60,8 +60,7 @@ void Predictor::run(const Armor &target,queue<double*> signal_queue,bool isBigBu
 			min_distance = distance_x_y;
 			alpha_min = alpha;
 		}
-		else;
-
+//		else;
 	}
 	cout << "alpha_min = " << alpha_min / PI * 180 << endl;
 	cout << "theta = " << theta / PI * 180 << endl;
@@ -72,10 +71,15 @@ void Predictor::run(const Armor &target,queue<double*> signal_queue,bool isBigBu
     timer.stop();
 	signal[1] = alpha_min / PI * 180;
 	signal_queue.push(signal);
-	for(int i=0;i<3;i++){
+//	for(int i=0;i<3;i++){
 //		signal_queue.push(interpolation())
-	}
+//	}
 }
+
+void Predictor::setPitchAngle(const double input_pitch_angle) {
+    pitch_angle=input_pitch_angle;
+}
+
 double Predictor::find_alpha(double v, double x, double y)
 {
 	double t1, t2, t1_sqrt_pre, t2_sqrt_pre;

@@ -5,7 +5,7 @@
 
  Detail:
  *****************************************************************************/
-
+#define GPU_PROCESS
 #include "workspace.h"
 
 Workspace::Workspace() {
@@ -59,10 +59,19 @@ bool Workspace::image_processing_thread_func() {
             if(work_mode==MODE::ARMOR_BLUE||work_mode==MODE::ARMOR_RED) {
                 current_frame = raw_image_buffer_mono.front();
                 raw_image_buffer_mono.pop();
+#ifdef GPU_PROCESS
                 armor_preprocessor.run(current_frame,
                                        preprocessed_image_mono,
                                        camera_matrix_mono,
-                                       distortion_coeff_mono);
+                                       distortion_coeff_mono,
+                                       true);
+#else
+                armor_preprocessor.run(current_frame,
+                                       preprocessed_image_mono,
+                                       camera_matrix_mono,
+                                       distortion_coeff_mono,
+                                       false);
+#endif
                 contours_finder.run(preprocessed_image_mono, lightbars);
                 armor_finder.run(lightbars, armors, false);
                 angle_solver.run(armors, target);
@@ -76,23 +85,13 @@ bool Workspace::image_processing_thread_func() {
             continue;
         }
     }
-
-//    thread(&AngleSolver::run(),angle_solver);
-//    thread(&TargetSelector::run(),target_selector);
-
-//    while(true) {
-//        this->timer.start();
-//        processing_loop();
-//        cout<<"processing_loop running time:"<<this->timer.restart()<<endl;
-//    }
-    return true;
 }
 
 bool Workspace::message_communication_thread_func(){
     //TODO:加入看门狗通信
     while(true){
         serialport.praseDataFromCar();
-        setPtzAngle(serialport.getAnglePitch());
+        predictor.setPitchAngle(serialport.getAnglePitch());
         setMode(serialport.getMode());
         if(!signal_queue.empty()) {
             serialport.sendXYZ(signal_queue.front());

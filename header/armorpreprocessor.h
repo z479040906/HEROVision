@@ -14,6 +14,7 @@
 #define HERORM2019_ARMORPREPROCESSOR_H
 
 #include <opencv2/opencv.hpp>
+#include <opencv2/cudaarithm.hpp>
 #include <vector>
 
 #include "camera.h"
@@ -36,6 +37,7 @@ private:
     int enemy_color;
     int thres;
     Mat contour_thread_kernel;
+    Ptr<cv::cuda::Filter> dilate_filter;
 
 public:
     ArmorPreprocessor();
@@ -44,7 +46,9 @@ public:
     void run(Frame &row_image,
              Frame &preprocessed_image,
              const Mat &camera_matrix,
-             const Mat &distortion_coeff);
+             const Mat &distortion_coeff,
+             const bool if_use_gpu);
+
 private:
 
     void processInput(Mat &input,
@@ -53,6 +57,14 @@ private:
                       const Mat &distortion_coeff);//处理输入图像
     void processChannels(vector<Mat> &channels, Mat &binary);
     void adjustImage(Mat &img,const Mat &camera_matrix,const Mat &distortion_coeff);
+    void GpuRun(Frame &raw_image,
+                Frame &preprocessed_image,
+                const Mat &camera_matrix,
+                const Mat &distortion_coeff);
+/*    void gpu_adjustImage(Mat &img,
+                         const Mat &camera_matrix,
+                         const Mat &distortion_coeff
+    );*/
 };
 
 
